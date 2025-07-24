@@ -1,24 +1,245 @@
-# LodeStat ⚽
+# 🏓 Lodstats - Sistema di Gestione Partite Calcetto-Balilla
 
-**LodeStat** è un'applicazione web sviluppata in Vue.js per tenere traccia delle partite di calcetto giocate in azienda presso Lodestar. Il sistema permette di registrare partite, gestire statistiche dei giocatori e mantenere classifiche aggiornate.
+Un'applicazione fullstack per registrare e gestire partite di calcetto-balilla giocate dai dipendenti di varie aziende.
 
-## 🏆 Caratteristiche
+## 🚀 Caratteristiche
 
-- 📊 **Gestione Partite**: Registra facilmente le partite giocate con risultati e formazioni
-- 👥 **Gestione Giocatori**: Mantieni un database aggiornato di tutti i giocatori
-- 📈 **Statistiche**: Visualizza statistiche dettagliate per ogni giocatore (gol, assist, vittorie, etc.)
-- 🏅 **Classifiche**: Classifica automatica dei giocatori basata su performance
-- 📱 **Responsive Design**: Interfaccia ottimizzata per desktop e mobile
-- ⚡ **Real-time Updates**: Aggiornamenti in tempo reale delle statistiche
+- ✅ **Registrazione partite** - 1vs1 o 2vs2 con data e punteggio
+- ✅ **Gestione giocatori** - Lista con autocomplete e creazione al volo
+- ✅ **Visualizzazione partite** - Cronologia completa delle partite
+- ✅ **Dashboard statistiche** - Riepilogo generale e giocatori top
+- ✅ **Nessun login richiesto** - Accesso diretto e veloce
+- ✅ **Database cloud** - MongoDB Atlas per persistenza dei dati
+- ✅ **API REST complete** - Backend robusto con validazione
 
-## 🛠️ Tecnologie Utilizzate
+## 🛠️ Stack Tecnologico
 
-- **Vue.js 3** - Framework JavaScript progressivo
-- **Vue Router** - Routing per Single Page Application
-- **Pinia** - State management per Vue.js
-- **Vite** - Build tool e dev server veloce
-- **CSS3/SCSS** - Styling moderno e responsive
-- **Chart.js** - Grafici e visualizzazioni dati
+### Backend
+- **Node.js** + **Express** - Server API REST
+- **MongoDB Atlas** - Database cloud con Mongoose ODM
+- **Helmet** + **CORS** - Sicurezza e configurazione
+- **Rate Limiting** - Protezione da abusi API
+
+### Frontend
+- **Vue 3** + **Composition API** - Framework reattivo moderno
+- **Vite** - Build tool veloce e dev server
+- **Vue Router** - Routing SPA
+- **Axios** - HTTP client per comunicazione API
+
+## 📁 Struttura del Progetto
+
+```plaintext
+lodstats/
+├── server/                 # Backend Node.js + Express
+│   ├── models/            # Schemi Mongoose (Player, Match)
+│   ├── routes/            # API REST endpoints
+│   ├── server.js          # Server principale con MongoDB Atlas
+│   ├── server-demo.js     # Server demo con dati in memoria
+│   ├── init-db.js         # Script inizializzazione database
+│   ├── test-db.js         # Test connessione database
+│   ├── package.json       # Dipendenze backend
+│   └── .env               # Configurazione ambiente
+├── client/                # Frontend Vue 3
+│   ├── src/
+│   │   ├── components/    # Componenti Vue riutilizzabili
+│   │   ├── views/         # Pagine principali (Dashboard, Players, etc.)
+│   │   ├── services/      # API client con Axios
+│   │   ├── router/        # Configurazione Vue Router
+│   │   └── styles/        # CSS globale e tema retro
+│   ├── public/            # File statici (favicon, icone)
+│   ├── package.json       # Dipendenze frontend
+│   └── vite.config.js     # Configurazione Vite e proxy
+└── README.md              # Questo file
+```
+
+## 🚀 Installazione e Configurazione
+
+### Prerequisiti
+
+- **Node.js** v18 o superiore
+- **npm** o **yarn**
+- **Account MongoDB Atlas** (per database cloud)
+
+### 1. Clone del Repository
+
+```bash
+git clone https://github.com/your-username/lodstats.git
+cd lodstats
+```
+
+### 2. Setup Backend
+
+```bash
+cd server
+npm install
+```
+
+Crea il file `.env` con la configurazione MongoDB:
+
+```env
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/lodstats?retryWrites=true&w=majority
+PORT=3000
+NODE_ENV=production
+```
+
+### 3. Setup Frontend
+
+```bash
+cd client
+npm install
+npm run build
+```
+
+### 4. Inizializzazione Database
+
+```bash
+cd server
+npm run init-db    # Inizializza database con dati di esempio
+npm run test-db    # Testa connessione MongoDB Atlas
+```
+
+## 🏃‍♂️ Esecuzione
+
+### Modalità Produzione (consigliata)
+
+```bash
+cd server
+npm start          # Avvia server con MongoDB Atlas
+```
+
+L'app sarà disponibile su: `http://localhost:3000`
+
+### Modalità Demo (senza database)
+
+```bash
+cd server
+npm run demo       # Avvia server con dati in memoria
+```
+
+### Modalità Sviluppo (con hot-reload)
+
+Terminal 1 - Backend:
+```bash
+cd server
+npm run dev        # Server su porta 3001
+```
+
+Terminal 2 - Frontend:
+```bash
+cd client
+npm run dev        # Dev server su porta 5173
+```
+
+## 📊 API Endpoints
+
+### Giocatori
+
+- `GET /api/players` - Lista tutti i giocatori
+- `POST /api/players` - Crea nuovo giocatore
+- `GET /api/players/:id` - Dettagli giocatore specifico
+- `PUT /api/players/:id` - Aggiorna giocatore
+- `DELETE /api/players/:id` - Elimina giocatore
+
+### Partite
+
+- `GET /api/matches` - Lista tutte le partite
+- `POST /api/matches` - Registra nuova partita
+- `GET /api/matches/:id` - Dettagli partita specifica
+- `PUT /api/matches/:id` - Aggiorna partita
+- `DELETE /api/matches/:id` - Elimina partita
+
+### Statistiche
+
+- `GET /api/stats` - Statistiche generali
+- `GET /api/stats/players` - Classifica giocatori
+- `GET /api/stats/players/:id` - Statistiche giocatore specifico
+
+## 🎮 Come Usare l'App
+
+1. **Dashboard** - Panoramica generale con statistiche principali
+2. **Nuova Partita** - Registra partite 1vs1 o 2vs2 con autocomplete giocatori
+3. **Partite** - Visualizza cronologia completa delle partite
+4. **Giocatori** - Gestisci lista giocatori con statistiche individuali
+5. **Statistiche** - Analisi dettagliate e classifiche
+
+## 🔧 Scripts NPM Disponibili
+
+### Backend (server/)
+
+```bash
+npm start          # Avvia server produzione con MongoDB Atlas
+npm run demo       # Avvia server demo con dati in memoria
+npm run dev        # Avvia server sviluppo con nodemon
+npm run init-db    # Inizializza database con dati esempio
+npm run test-db    # Testa connessione MongoDB Atlas
+```
+
+### Frontend (client/)
+
+```bash
+npm run dev        # Dev server con hot-reload
+npm run build      # Build per produzione
+npm run preview    # Preview build locale
+```
+
+## 🎨 Caratteristiche Interfaccia
+
+- **Tema Retro Terminal** - Design ispirato ai computer degli anni '80
+- **Colori Neon** - Verde fosforescente su sfondo scuro
+- **Font Monospace** - Courier New per aspetto da terminale
+- **Responsive Design** - Funziona su desktop e mobile
+- **Navigazione Veloce** - Router Vue per navigazione istantanea
+
+## 🔒 Sicurezza e Performance
+
+- **Rate Limiting** - Protezione da abusi API
+- **Input Validation** - Validazione dati sia client che server
+- **Error Handling** - Gestione errori robusta e user-friendly
+- **Database Indexes** - Query ottimizzate su MongoDB
+- **CORS Configuration** - Configurazione sicura per richieste cross-origin
+
+## 🌟 Roadmap Futura
+
+- [ ] **Autenticazione** - Login opzionale per admin
+- [ ] **Export Dati** - Export statistiche in CSV/PDF
+- [ ] **Notifiche** - Push notifications per nuove partite
+- [ ] **Grafici Avanzati** - Chart.js per visualizzazioni dettagliate
+- [ ] **API Mobile** - Endpoint ottimizzati per app mobile
+- [ ] **Backup Automatico** - Backup periodici database
+- [ ] **Tornei** - Sistema gestione tornei e playoff
+
+## 👥 Contribuire
+
+1. Fork del repository
+2. Crea branch feature (`git checkout -b feature/nuova-feature`)
+3. Commit delle modifiche (`git commit -m 'Aggiungi nuova feature'`)
+4. Push al branch (`git push origin feature/nuova-feature`)
+5. Apri Pull Request
+
+## 📄 Licenza
+
+Questo progetto è rilasciato sotto licenza MIT. Vedi file `LICENSE` per dettagli.
+
+## 🚨 Troubleshooting
+
+### Problemi Comuni
+
+**Database Connection Failed**
+- Verifica che la stringa MongoDB URI sia corretta in `.env`
+- Controlla che l'IP sia whitelistato su MongoDB Atlas
+- Testa la connessione con `npm run test-db`
+
+**Build Frontend Fallisce**
+- Verifica che Node.js sia v18 o superiore
+- Cancella `node_modules` e reinstalla: `rm -rf node_modules && npm install`
+
+**Porta 3000 già in uso**
+- Cambia porta in `.env`: `PORT=3001`
+- O termina il processo: `lsof -ti:3000 | xargs kill -9`
+
+---
+
+**Made with ❤️ for calcetto-balilla enthusiasts!** 🏓
 
 ## 🚀 Installazione e Setup
 

@@ -1,0 +1,25 @@
+{
+  "name": "lodstats-client",
+  "version": "1.0.0",
+  "description": "Frontend per Lodstats - app di gestione partite calcetto-balilla",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "serve": "vite preview"
+  },
+  "keywords": ["vue", "calcetto", "football", "statistics", "lodstats", "tracking"],
+  "author": "Lodstats Team",
+  "license": "MIT",
+  "dependencies": {
+    "vue": "^3.4.29",
+    "vue-router": "^4.3.3",
+    "axios": "^1.6.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.5",
+    "vite": "^5.3.1"
+  }
+}

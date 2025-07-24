@@ -148,67 +148,67 @@
 
 <script>
 import { ref, onMounted } from 'vue'
+import { matchesAPI, playersAPI, handleAPIError } from '../services/api.js'
 
 export default {
   name: 'Dashboard',
   setup() {
     // Reactive data
-    const totalMatches = ref(247)
-    const activePlayers = ref(18)
+    const totalMatches = ref(0)
+    const activePlayers = ref(0)
     const lastBackup = ref('23/07/2025 14:30')
     const systemUptime = ref('12d 8h 42m')
+    const loading = ref(true)
+    const error = ref(null)
     
-    // Sample data for recent matches
-    const recentMatches = ref([
-      {
-        id: 1,
-        date: '2025-07-23T16:30:00',
-        type: 'friendly',
-        teamHome: {
-          name: 'Team Alpha',
-          players: ['Marco', 'Luca', 'Andrea']
-        },
-        teamAway: {
-          name: 'Team Beta',
-          players: ['Paolo', 'Giulio', 'Francesco']
-        },
-        scoreHome: 3,
-        scoreAway: 2,
-        duration: 45
-      },
-      {
-        id: 2,
-        date: '2025-07-23T14:15:00',
-        type: 'tournament',
-        teamHome: {
-          name: 'Developers',
-          players: ['Simone', 'Roberto', 'Alessandro']
-        },
-        teamAway: {
-          name: 'Designers',
-          players: ['Matteo', 'Lorenzo', 'Davide']
-        },
-        scoreHome: 1,
-        scoreAway: 4,
-        duration: 50
-      },
-      {
-        id: 3,
-        date: '2025-07-22T18:00:00',
-        type: 'friendly',
-        teamHome: {
-          name: 'Veterans',
-          players: ['Giuseppe', 'Antonio', 'Stefano']
-        },
-        teamAway: {
-          name: 'Rookies',
-          players: ['Tommaso', 'Federico', 'Riccardo']
-        },
-        scoreHome: 2,
-        scoreAway: 2,
-        duration: 40
+    // Sample data for recent matches - verrà sostituito con dati reali
+    const recentMatches = ref([])
+    
+    // Methods per caricare dati dall'API
+    const loadDashboardData = async () => {
+      loading.value = true
+      error.value = null
+      
+      try {
+        // Carica statistiche delle partite
+        const matchStats = await matchesAPI.getStats()
+        if (matchStats.success) {
+          totalMatches.value = matchStats.data.totalMatches || 0
+        }
+
+        // Carica numero di giocatori
+        const playersResponse = await playersAPI.getAll({ limit: 1 })
+        if (playersResponse.success) {
+          activePlayers.value = playersResponse.count || 0
+        }
+
+        // Carica partite recenti
+        const recentResponse = await matchesAPI.getAll({ limit: 3 })
+        if (recentResponse.success) {
+          recentMatches.value = recentResponse.data.map(match => ({
+            id: match._id,
+            date: match.date,
+            type: 'friendly',
+            teamHome: {
+              name: 'Team A',
+              players: match.teamA.map(p => `${p.nome} ${p.cognome}`)
+            },
+            teamAway: {
+              name: 'Team B',
+              players: match.teamB.map(p => `${p.nome} ${p.cognome}`)
+            },
+            scoreHome: match.scoreA,
+            scoreAway: match.scoreB,
+            duration: 45 // Placeholder
+          }))
+        }
+      } catch (err) {
+        error.value = handleAPIError(err)
+        console.error('Errore caricamento dashboard:', err)
+      } finally {
+        loading.value = false
       }
-    ])
+    }
     
     // Methods
     const formatDate = (dateString) => {
@@ -242,6 +242,11 @@ export default {
       
       alert('📋 Report generato con successo! 🎮')
     }
+
+    // Carica i dati al mount del componente
+    onMounted(() => {
+      loadDashboardData()
+    })
     
     return {
       totalMatches,
@@ -249,8 +254,11 @@ export default {
       lastBackup,
       systemUptime,
       recentMatches,
+      loading,
+      error,
       formatDate,
-      generateReport
+      generateReport,
+      loadDashboardData
     }
   }
 }
