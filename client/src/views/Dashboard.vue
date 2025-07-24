@@ -337,7 +337,8 @@ export default {
 .hero-section {
   text-align: center;
   padding: var(--spacing-xxl) 0;
-  background: linear-gradient(45deg, rgba(0, 255, 65, 0.1), rgba(0, 212, 255, 0.1));
+  background: linear-gradient(135deg, rgba(0, 20, 10, 0.9), rgba(0, 40, 20, 0.8));
+  border: 1px solid rgba(0, 255, 65, 0.3);
   border-radius: var(--radius-lg);
   margin-bottom: var(--spacing-xl);
   position: relative;
@@ -423,7 +424,10 @@ export default {
 }
 
 .action-card:hover {
-  transform: translateY(-8px) scale(1.02);
+  background: rgba(0, 255, 65, 0.15);
+  box-shadow: 0 8px 25px rgba(0, 255, 65, 0.3);
+  transform: scale(1.05);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 .action-icon {
