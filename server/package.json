@@ -8,7 +8,8 @@
     "dev": "nodemon server.js",
     "demo": "node server-demo.js",
     "init-db": "node init-db.js",
-    "test-db": "node test-db.js"
+    "test-db": "node test-db.js",
+    "monitor": "node status-monitor.js"
   },
   "dependencies": {
     "express": "^4.18.2",

@@ -9,6 +9,7 @@ const path = require('path');
 // Import routes
 const playersRoutes = require('./routes/players');
 const matchesRoutes = require('./routes/matches');
+const statusRoutes = require('./routes/status');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -85,6 +86,7 @@ const connectDB = async () => {
 // API Routes
 app.use('/api/players', playersRoutes);
 app.use('/api/matches', matchesRoutes);
+app.use('/api/status', statusRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

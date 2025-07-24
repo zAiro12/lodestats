@@ -121,19 +121,22 @@
           <div class="terminal-output">
             <div class="status-line">
               <span class="status-key">Database:</span>
-              <span class="status-value success">● ONLINE</span>
+              <div class="status-right">
+                <span class="status-value" :class="getDatabaseStatusClass()">● {{ (systemStatus.database?.status || 'CHECKING...').toUpperCase() }}</span>
+                <span v-if="systemStatus.database?.latency >= 0" class="status-latency">({{ systemStatus.database.latency }}ms)</span>
+              </div>
             </div>
             <div class="status-line">
               <span class="status-key">API Server:</span>
-              <span class="status-value success">● RUNNING</span>
+              <span class="status-value" :class="getApiStatusClass()">● {{ (systemStatus.apiServer?.status || 'CHECKING...').toUpperCase() }}</span>
             </div>
             <div class="status-line">
               <span class="status-key">Last Backup:</span>
-              <span class="status-value">{{ lastBackup }}</span>
+              <span class="status-value">{{ formatBackupTime() }}</span>
             </div>
             <div class="status-line">
               <span class="status-key">Uptime:</span>
-              <span class="status-value">{{ systemUptime }}</span>
+              <span class="status-value uptime">{{ systemStatus.apiServer?.uptime || 'calculating...' }}</span>
             </div>
           </div>
           <div class="terminal-line">
@@ -147,8 +150,9 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { matchesAPI, playersAPI, handleAPIError } from '../services/api.js'
+import axios from 'axios'
 
 export default {
   name: 'Dashboard',
@@ -156,10 +160,10 @@ export default {
     // Reactive data
     const totalMatches = ref(0)
     const activePlayers = ref(0)
-    const lastBackup = ref('23/07/2025 14:30')
-    const systemUptime = ref('12d 8h 42m')
     const loading = ref(true)
     const error = ref(null)
+    const systemStatus = ref({})
+    let statusInterval = null
     
     // Sample data for recent matches - verrà sostituito con dati reali
     const recentMatches = ref([])
@@ -243,22 +247,82 @@ export default {
       alert('📋 Report generato con successo! 🎮')
     }
 
+    // System Status Functions
+    const loadSystemStatus = async () => {
+      try {
+        const response = await axios.get('/api/status')
+        systemStatus.value = response.data
+      } catch (error) {
+        console.error('Failed to fetch system status:', error)
+        systemStatus.value = {
+          database: { status: 'offline' },
+          apiServer: { status: 'offline' },
+          backup: { status: 'unknown' }
+        }
+      }
+    }
+
+    const getDatabaseStatusClass = () => {
+      const status = systemStatus.value.database?.status
+      if (status === 'online') return 'success'
+      if (status === 'offline') return 'error'
+      return 'warning'
+    }
+
+    const getApiStatusClass = () => {
+      const status = systemStatus.value.apiServer?.status
+      if (status === 'online') return 'success'
+      if (status === 'offline') return 'error'
+      return 'warning'
+    }
+
+    const getBackupStatusClass = () => {
+      const status = systemStatus.value.backup?.status
+      if (status === 'completed') return 'success'
+      if (status === 'failed') return 'error'
+      return 'warning'
+    }
+
+    const formatBackupTime = () => {
+      const lastBackup = systemStatus.value.backup?.lastBackup
+      if (!lastBackup) return 'unknown'
+      
+      const date = new Date(lastBackup)
+      return date.toLocaleTimeString('it-IT', {
+        hour: '2-digit',
+        minute: '2-digit'
+      })
+    }
+
     // Carica i dati al mount del componente
     onMounted(() => {
       loadDashboardData()
+      loadSystemStatus()
+      
+      // Auto-refresh system status ogni 30 secondi
+      statusInterval = setInterval(loadSystemStatus, 30000)
+    })
+
+    onUnmounted(() => {
+      if (statusInterval) {
+        clearInterval(statusInterval)
+      }
     })
     
     return {
       totalMatches,
       activePlayers,
-      lastBackup,
-      systemUptime,
       recentMatches,
       loading,
       error,
+      systemStatus,
       formatDate,
       generateReport,
-      loadDashboardData
+      loadDashboardData,
+      getDatabaseStatusClass,
+      getApiStatusClass,
+      getBackupStatusClass,
+      formatBackupTime
     }
   }
 }
@@ -587,8 +651,35 @@ export default {
   color: var(--text-white);
 }
 
+.status-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
 .status-value.success {
   color: var(--primary-green);
+}
+
+.status-value.error {
+  color: #ff4444;
+  text-shadow: 0 0 5px #ff4444;
+}
+
+.status-value.warning {
+  color: #ffaa00;
+  text-shadow: 0 0 5px #ffaa00;
+}
+
+.status-latency {
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  margin-left: var(--spacing-xs);
+}
+
+.uptime {
+  color: #00aaff;
+  text-shadow: 0 0 5px #00aaff;
 }
 
 .cursor {
