@@ -121,6 +121,73 @@ app.use((req, res, next) => {
   next();
 });
 
+// Tempo di avvio del server per uptime
+const serverStartTime = new Date();
+
+// API Routes - Status
+app.get('/api/status', (req, res) => {
+  const uptimeMs = Date.now() - serverStartTime.getTime();
+  const formatUptime = (ms) => {
+    const seconds = Math.floor(ms / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    
+    if (days > 0) {
+      return `${days}d ${hours % 24}h ${minutes % 60}m`;
+    } else if (hours > 0) {
+      return `${hours}h ${minutes % 60}m`;
+    } else if (minutes > 0) {
+      return `${minutes}m ${seconds % 60}s`;
+    } else {
+      return `${seconds}s`;
+    }
+  };
+
+  // Simula backup info
+  const now = new Date();
+  const lastBackup = new Date(now.getTime() - (2 * 60 * 60 * 1000)); // 2 ore fa
+
+  res.json({
+    timestamp: new Date().toISOString(),
+    status: 'healthy',
+    database: {
+      status: 'online',
+      latency: 5, // Demo mode - no real database
+      connected: true,
+      host: 'Demo Mode (In-Memory)'
+    },
+    apiServer: {
+      status: 'online',
+      uptime: formatUptime(uptimeMs),
+      startTime: serverStartTime.toISOString(),
+      version: '1.0.0-demo'
+    },
+    backup: {
+      lastBackup: lastBackup.toISOString(),
+      status: 'completed',
+      nextScheduled: new Date(now.getTime() + (22 * 60 * 60 * 1000)).toISOString()
+    },
+    system: {
+      nodeVersion: process.version,
+      platform: process.platform,
+      memory: {
+        used: Math.round(process.memoryUsage().heapUsed / 1024 / 1024),
+        total: Math.round(process.memoryUsage().heapTotal / 1024 / 1024)
+      },
+      pid: process.pid
+    }
+  });
+});
+
+app.get('/api/status/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    uptime: Date.now() - serverStartTime.getTime()
+  });
+});
+
 // API Routes - Players
 app.get('/api/players', (req, res) => {
   try {

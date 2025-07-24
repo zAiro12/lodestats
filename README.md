@@ -154,6 +154,11 @@ npm run dev        # Dev server su porta 5173
 - `GET /api/stats/players` - Classifica giocatori
 - `GET /api/stats/players/:id` - Statistiche giocatore specifico
 
+### System Status
+
+- `GET /api/status` - Status completo sistema (database, API, backup, uptime)
+- `GET /api/status/health` - Health check veloce per monitoring
+
 ## 🎮 Come Usare l'App
 
 1. **Dashboard** - Panoramica generale con statistiche principali
@@ -172,6 +177,7 @@ npm run demo       # Avvia server demo con dati in memoria
 npm run dev        # Avvia server sviluppo con nodemon
 npm run init-db    # Inizializza database con dati esempio
 npm run test-db    # Testa connessione MongoDB Atlas
+npm run monitor    # Monitor live dello status sistema
 ```
 
 ### Frontend (client/)
@@ -376,4 +382,30 @@ Questo progetto è rilasciato sotto licenza MIT. Vedi il file `LICENSE` per magg
 
 ---
 
+## 🔧 System Status Live
+
+I seguenti parametri vengono aggiornati in tempo reale dall'applicazione:
+
+- **Database**: Connessione MongoDB Atlas con latency monitoring
+- **API Server**: Status e uptime del server Express.js  
+- **Last Backup**: Timestamp ultimo backup (simulato in demo mode)
+- **Uptime**: Tempo di attività continua del sistema
+
+Per visualizzare lo status live, avvia l'applicazione e vai alla **Dashboard** oppure accedi direttamente agli endpoint:
+
+```bash
+# Status completo sistema
+curl http://localhost:3000/api/status
+
+# Health check veloce  
+curl http://localhost:3000/api/status/health
+```
+
 **LodeStat** - _Dove ogni gol conta e ogni vittoria è celebrata!_ ⚽🏆
+
+### 📊 Current Status
+
+- **🟢 Database**: MongoDB Atlas Connected
+- **🟢 API Server**: Running (Express.js)
+- **🟢 Last Backup**: Auto-scheduled 
+- **🟢 Uptime**: Real-time monitoring
