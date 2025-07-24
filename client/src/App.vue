@@ -74,9 +74,6 @@
         </div>
       </div>
     </footer>
-
-    <!-- Matrix rain effect overlay -->
-    <div class="matrix-overlay" ref="matrixCanvas"></div>
   </div>
 </template>
 
@@ -91,7 +88,6 @@ export default {
     const router = useRouter()
     const currentTime = ref('')
     const totalGames = ref(0) // Inizializzato a 0, verrà aggiornato dalle API
-    const matrixCanvas = ref(null)
     
     // Navigation routes
     const navRoutes = [
@@ -132,51 +128,7 @@ export default {
       oscillator.stop(audioContext.currentTime + 0.1)
     }
 
-    // Matrix rain effect
-    const createMatrixEffect = () => {
-      if (!matrixCanvas.value) return
-      
-      const canvas = document.createElement('canvas')
-      matrixCanvas.value.appendChild(canvas)
-      
-      const ctx = canvas.getContext('2d')
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
-      
-      const chars = '01⚽🎮🏆👾💚'
-      const matrix = chars.split('')
-      const font_size = 10
-      const columns = canvas.width / font_size
-      const drops = []
-      
-      for (let x = 0; x < columns; x++) {
-        drops[x] = 1
-      }
-      
-      const draw = () => {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.04)'
-        ctx.fillRect(0, 0, canvas.width, canvas.height)
-        
-        ctx.fillStyle = '#00ff41'
-        ctx.font = font_size + 'px monospace'
-        
-        for (let i = 0; i < drops.length; i++) {
-          const text = matrix[Math.floor(Math.random() * matrix.length)]
-          ctx.fillText(text, i * font_size, drops[i] * font_size)
-          
-          if (drops[i] * font_size > canvas.height && Math.random() > 0.975) {
-            drops[i] = 0
-          }
-          drops[i]++
-        }
-      }
-      
-      const interval = setInterval(draw, 35)
-      return () => clearInterval(interval)
-    }
-
     let timeInterval
-    let matrixCleanup
 
     onMounted(async () => {
       updateTime()
@@ -196,23 +148,16 @@ export default {
         console.warn('⚠️ Backend non raggiungibile:', handleAPIError(error))
         // Mantieni il valore di default se il backend non è disponibile
       }
-      
-      // Start matrix effect after a delay
-      setTimeout(() => {
-        matrixCleanup = createMatrixEffect()
-      }, 1000)
     })
 
     onUnmounted(() => {
       if (timeInterval) clearInterval(timeInterval)
-      if (matrixCleanup) matrixCleanup()
     })
 
     return {
       currentTime,
       totalGames,
       navRoutes,
-      matrixCanvas,
       playNavSound
     }
   }
@@ -314,11 +259,11 @@ export default {
 }
 
 .nav-link:hover {
-  color: var(--primary-green);
-  border-color: var(--primary-green);
+  color: var(--text-white);
+  border-color: var(--text-white);
   background: rgba(0, 255, 65, 0.1);
-  transform: translateY(-2px);
   box-shadow: var(--shadow-neon);
+  transform: scale(1.05);
 }
 
 .nav-link.active {
@@ -363,18 +308,6 @@ export default {
   flex-wrap: wrap;
   gap: var(--spacing-md);
   font-size: 0.7rem;
-}
-
-/* Matrix Overlay */
-.matrix-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: -1;
-  opacity: 0.3;
 }
 
 /* Responsive Design */
