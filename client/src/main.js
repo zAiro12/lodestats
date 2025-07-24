@@ -1,5 +1,4 @@
 import { createApp } from "vue";
-import { createPinia } from "pinia";
 import { createRouter, createWebHistory } from "vue-router";
 
 import App from "./App.vue";
@@ -57,13 +56,9 @@ router.beforeEach((to, from, next) => {
   next();
 });
 
-// Pinia store
-const pinia = createPinia();
-
 // Create and mount app
 const app = createApp(App);
 
-app.use(pinia);
 app.use(router);
 
 // Global properties for retro effects

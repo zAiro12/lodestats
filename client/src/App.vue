@@ -83,13 +83,14 @@
 <script>
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { generalAPI, matchesAPI, handleAPIError } from './services/api.js'
 
 export default {
   name: 'App',
   setup() {
     const router = useRouter()
     const currentTime = ref('')
-    const totalGames = ref(247)
+    const totalGames = ref(0) // Inizializzato a 0, verrà aggiornato dalle API
     const matrixCanvas = ref(null)
     
     // Navigation routes
@@ -177,9 +178,24 @@ export default {
     let timeInterval
     let matrixCleanup
 
-    onMounted(() => {
+    onMounted(async () => {
       updateTime()
       timeInterval = setInterval(updateTime, 1000)
+      
+      // Health check per verificare la connessione al backend
+      try {
+        const health = await generalAPI.healthCheck()
+        console.log('✅ Backend connesso:', health.message)
+        
+        // Carica il numero totale di partite
+        const stats = await matchesAPI.getStats()
+        if (stats.success) {
+          totalGames.value = stats.data.totalMatches
+        }
+      } catch (error) {
+        console.warn('⚠️ Backend non raggiungibile:', handleAPIError(error))
+        // Mantieni il valore di default se il backend non è disponibile
+      }
       
       // Start matrix effect after a delay
       setTimeout(() => {

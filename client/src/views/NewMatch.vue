@@ -1,9 +1,9 @@
 <template>
   <div class="new-match">
     <div class="page-header">
-      <h1 class="page-title text-pixel">🎮 New Match</h1>
+      <h1 class="page-title text-pixel">🎮 Nuova Partita</h1>
       <p class="page-subtitle text-cyber">
-        >> Registra una nuova partita
+        >> Registra una nuova partita di calcetto-balilla
       </p>
     </div>
 
