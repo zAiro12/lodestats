@@ -129,3 +129,5 @@ ui-debug.log
 *.db
 *.sqlite
 *.sqlite3
+
+utils/
