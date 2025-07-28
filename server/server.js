@@ -12,7 +12,10 @@ const matchesRoutes = require('./routes/matches');
 const statusRoutes = require('./routes/status');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3082; // Porta corretta per produzione
+
+// Trust proxy (per Apache reverse proxy)
+app.set('trust proxy', 1);
 
 // Sicurezza - Rate limiting
 const limiter = rateLimit({
@@ -34,7 +37,7 @@ app.use(limiter);
 // CORS configuration
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
-    ? ['http://localhost:3000'] // In produzione, solo il nostro dominio
+    ? ['https://lodestats.lucaairo.it', 'http://lodestats.lucaairo.it'] // In produzione, HTTPS ha priorità
     : ['http://localhost:5173', 'http://localhost:3000'], // In sviluppo, Vite dev server
   credentials: true
 }));
@@ -99,7 +102,12 @@ app.get('/api/health', (req, res) => {
 });
 
 // Serve static files (built Vue app)
-app.use(express.static(path.join(__dirname, '../client/dist')));
+// In produzione i file sono in ./public, in sviluppo in ../client/dist
+const staticPath = process.env.NODE_ENV === 'production' 
+  ? path.join(__dirname, 'public')
+  : path.join(__dirname, '../client/dist');
+
+app.use(express.static(staticPath));
 
 // Fallback per SPA routing (Vue Router)
 app.get('*', (req, res) => {
@@ -112,7 +120,11 @@ app.get('*', (req, res) => {
   }
   
   // Serve l'app Vue per tutte le altre richieste
-  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+  const indexPath = process.env.NODE_ENV === 'production'
+    ? path.join(__dirname, 'public/index.html')
+    : path.join(__dirname, '../client/dist/index.html');
+    
+  res.sendFile(indexPath);
 });
 
 // Error handling middleware
