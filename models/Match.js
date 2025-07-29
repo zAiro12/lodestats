@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const matchSchema = new mongoose.Schema({
   date: {
@@ -77,4 +77,4 @@ matchSchema.pre('save', function(next) {
 // Indice per ordinare per data (più recenti prima)
 matchSchema.index({ date: -1 });
 
-module.exports = mongoose.model('Match', matchSchema);
+export default mongoose.model('Match', matchSchema);

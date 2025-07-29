@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const playerSchema = new mongoose.Schema({
   nome: {
@@ -41,4 +41,4 @@ playerSchema.pre('save', function(next) {
   next();
 });
 
-module.exports = mongoose.model('Player', playerSchema);
+export default mongoose.model('Player', playerSchema);

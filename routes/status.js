@@ -1,5 +1,6 @@
-const express = require('express');
-const mongoose = require('mongoose');
+import express from 'express';
+import mongoose from 'mongoose';
+
 const router = express.Router();
 
 // Tempo di avvio del server
@@ -119,4 +120,4 @@ router.get('/health', (req, res) => {
   });
 });
 
-module.exports = router;
+export default router;

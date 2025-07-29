@@ -1,8 +1,22 @@
 import { createApp } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
+import axios from "axios";
 
 import App from "./App.vue";
 import "./styles/main.css";
+
+// Configure axios defaults
+axios.defaults.baseURL = import.meta.env.DEV ? 'http://localhost:3000' : '';
+axios.defaults.timeout = 10000;
+
+// Global axios interceptors for better error handling
+axios.interceptors.response.use(
+  response => response,
+  error => {
+    console.error('API Error:', error.response?.data || error.message);
+    return Promise.reject(error);
+  }
+);
 
 // Import views (creeremo questi file dopo)
 import Dashboard from "./views/Dashboard.vue";
