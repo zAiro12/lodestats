@@ -1,7 +1,8 @@
-const express = require('express');
+import express from 'express';
+import Match from '../models/Match.js';
+import Player from '../models/Player.js';
+
 const router = express.Router();
-const Match = require('../models/Match');
-const Player = require('../models/Player');
 
 // GET /api/matches - Ottieni tutte le partite
 router.get('/', async (req, res) => {
@@ -237,4 +238,4 @@ router.get('/stats/summary', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

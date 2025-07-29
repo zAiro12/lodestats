@@ -1,6 +1,7 @@
-const express = require('express');
+import express from 'express';
+import Player from '../models/Player.js';
+
 const router = express.Router();
-const Player = require('../models/Player');
 
 // GET /api/players - Ottieni tutti i giocatori
 router.get('/', async (req, res) => {
@@ -143,4 +144,4 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

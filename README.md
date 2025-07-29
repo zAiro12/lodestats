@@ -62,32 +62,6 @@ Un'applicazione fullstack moderna per registrare e gestire partite di calcetto-b
 - **Vue Router** - Routing SPA
 - **Axios** - HTTP client per comunicazione API
 
-## 📁 Struttura del Progetto
-
-```plaintext
-lodstats/
-├── server/                 # Backend Node.js + Express
-│   ├── models/            # Schemi Mongoose (Player, Match)
-│   ├── routes/            # API REST endpoints
-│   ├── server.js          # Server principale con MongoDB Atlas
-│   ├── server-demo.js     # Server demo con dati in memoria
-│   ├── init-db.js         # Script inizializzazione database
-│   ├── test-db.js         # Test connessione database
-│   ├── package.json       # Dipendenze backend
-│   └── .env               # Configurazione ambiente
-├── client/                # Frontend Vue 3
-│   ├── src/
-│   │   ├── components/    # Componenti Vue riutilizzabili
-│   │   ├── views/         # Pagine principali (Dashboard, Players, etc.)
-│   │   ├── services/      # API client con Axios
-│   │   ├── router/        # Configurazione Vue Router
-│   │   └── styles/        # CSS globale e tema retro
-│   ├── public/            # File statici (favicon, icone)
-│   ├── package.json       # Dipendenze frontend
-│   └── vite.config.js     # Configurazione Vite e proxy
-└── README.md              # Questo file
-```
-
 ## 🚀 Installazione e Configurazione
 
 ### Prerequisiti
@@ -99,7 +73,7 @@ lodstats/
 ### 1. Clone del Repository
 
 ```bash
-git clone https://github.com/your-username/lodstats.git
+git clone https://github.com/zairo12/lodstats.git
 cd lodstats
 ```
 

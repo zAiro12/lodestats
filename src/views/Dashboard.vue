@@ -180,35 +180,42 @@ export default {
           totalMatches.value = matchStats.data.totalMatches || 0
         }
 
-        // Carica numero di giocatori
+        // Carica numero di giocatori attivi
         const playersResponse = await playersAPI.getAll({ limit: 1 })
         if (playersResponse.success) {
-          activePlayers.value = playersResponse.count || 0
+          // Per ottenere il conteggio totale, facciamo una chiamata senza limite
+          const allPlayersResponse = await playersAPI.getAll()
+          activePlayers.value = allPlayersResponse.data?.length || 0
         }
 
-        // Carica partite recenti
-        const recentResponse = await matchesAPI.getAll({ limit: 3 })
-        if (recentResponse.success) {
+        // Carica partite recenti (ultime 5)
+        const recentResponse = await matchesAPI.getAll({ limit: 5 })
+        if (recentResponse.success && recentResponse.data) {
           recentMatches.value = recentResponse.data.map(match => ({
             id: match._id,
             date: match.date,
             type: 'friendly',
             teamHome: {
               name: 'Team A',
-              players: match.teamA.map(p => `${p.nome} ${p.cognome}`)
+              players: match.teamA ? match.teamA.map(p => `${p.nome} ${p.cognome}`) : []
             },
             teamAway: {
-              name: 'Team B',
-              players: match.teamB.map(p => `${p.nome} ${p.cognome}`)
+              name: 'Team B', 
+              players: match.teamB ? match.teamB.map(p => `${p.nome} ${p.cognome}`) : []
             },
             scoreHome: match.scoreA,
             scoreAway: match.scoreB,
-            duration: 45 // Placeholder
+            duration: Math.floor(Math.random() * 30) + 15 // Placeholder duration 15-45 min
           }))
         }
       } catch (err) {
         error.value = handleAPIError(err)
         console.error('Errore caricamento dashboard:', err)
+        
+        // Fallback ai dati di esempio in caso di errore
+        totalMatches.value = 0
+        activePlayers.value = 0
+        recentMatches.value = []
       } finally {
         loading.value = false
       }

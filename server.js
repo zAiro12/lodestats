@@ -1,18 +1,26 @@
-require('dotenv').config();
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
-const path = require('path');
+import dotenv from 'dotenv';
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// ES module equivalent of __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Configure dotenv
+dotenv.config();
 
 // Import routes
-const playersRoutes = require('./routes/players');
-const matchesRoutes = require('./routes/matches');
-const statusRoutes = require('./routes/status');
+import playersRoutes from './routes/players.js';
+import matchesRoutes from './routes/matches.js';
+import statusRoutes from './routes/status.js';
 
 const app = express();
-const PORT = process.env.PORT || 3082; // Porta corretta per produzione
+const PORT = process.env.PORT || 3000; // Porta corretta per sviluppo
 
 // Trust proxy (per Apache reverse proxy)
 app.set('trust proxy', 1);
