@@ -1,7 +1,8 @@
 # 📁 Struttura Progetto LodeStat
 
 ## Struttura Unificata - Frontend + Backend
-```
+
+``` text
 lodestats/                      # 🏠 ROOT UNIFICATO
 │
 ├── 📱 FRONTEND (Vue 3)
@@ -66,6 +67,7 @@ lodestats/                      # 🏠 ROOT UNIFICATO
 ## 🎯 Architettura Tecnica
 
 ### Frontend (Vue 3)
+
 - **Framework**: Vue 3 Composition API
 - **Routing**: Vue Router 4 SPA
 - **Build Tool**: Vite 5.x (ultra-veloce)
@@ -73,6 +75,7 @@ lodestats/                      # 🏠 ROOT UNIFICATO
 - **Styling**: CSS moderno con variabili custom
 
 ### Backend (Express)
+
 - **Runtime**: Node.js con ES Modules
 - **Framework**: Express.js REST API
 - **Database**: MongoDB Atlas + Mongoose ODM
@@ -80,6 +83,7 @@ lodestats/                      # 🏠 ROOT UNIFICATO
 - **Validazione**: Schema validation integrata
 
 ### Database (MongoDB)
+
 ```javascript
 // Player Schema
 {
@@ -105,6 +109,7 @@ lodestats/                      # 🏠 ROOT UNIFICATO
 ## 🔧 Scripts NPM
 
 ### Sviluppo
+
 ```bash
 npm run dev     # Avvia backend + frontend insieme
 npm run client  # Solo frontend (porta 5173)
@@ -112,6 +117,7 @@ npm run server  # Solo backend (porta 3000)
 ```
 
 ### Produzione
+
 ```bash
 npm run build   # Build frontend per produzione
 npm start       # Avvia solo server produzione
@@ -119,6 +125,7 @@ npm run preview # Preview build produzione
 ```
 
 ### Database
+
 ```bash
 node init-db.js # Inizializza database MongoDB
 ```
@@ -126,18 +133,21 @@ node init-db.js # Inizializza database MongoDB
 ## 🌐 Porte e URL
 
 ### Sviluppo
+
 - **Frontend**: http://localhost:5173
 - **Backend**: http://localhost:3000  
 - **API Base**: http://localhost:3000/api
 - **Health Check**: http://localhost:3000/api/health
 
 ### Proxy Automatico
+
 Vite configura automaticamente il proxy:
 - `localhost:5173/api/*` → `localhost:3000/api/*`
 
 ## 🔑 Variabili Ambiente
 
 ### File .env richiesto
+
 ```env
 MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/lodestats
 PORT=3000
@@ -145,6 +155,7 @@ NODE_ENV=development
 ```
 
 ### Configurazione MongoDB Atlas
+
 1. Crea account su MongoDB Atlas
 2. Crea cluster gratuito
 3. Configura database user
@@ -155,22 +166,26 @@ NODE_ENV=development
 ## 📡 API Endpoints
 
 ### Players
+
 - `GET /api/players` - Lista giocatori (con search)
 - `POST /api/players` - Crea nuovo giocatore
 - `GET /api/players/:id` - Dettagli giocatore
 
 ### Matches
+
 - `GET /api/matches` - Lista partite (con filtri)
 - `POST /api/matches` - Crea nuova partita
 - `GET /api/matches/stats/summary` - Statistiche generali
 
 ### System
+
 - `GET /api/status` - Status sistema completo
 - `GET /api/health` - Health check semplice
 
 ## 🎨 Tema e Styling
 
 ### Colori Principali
+
 ```css
 --primary-green: #00ff41    /* Verde Matrix */
 --neon-blue: #00d4ff        /* Blu Neon */
@@ -179,6 +194,7 @@ NODE_ENV=development
 ```
 
 ### Font Stack
+
 - **Pixel**: Font retro per titoli
 - **Mono**: Font monospace per codice
 - **Sans**: Font moderno per testo
@@ -186,13 +202,15 @@ NODE_ENV=development
 ## 🧪 Testing
 
 ### Test Funzionalità
-1. Avvia: `npm run dev`
-2. Apri: http://localhost:5173
+
+1. Avvia: `npm run start`
+2. Apri: [localhost](http://localhost:5173)
 3. Testa autocompletamento in "Nuova Partita"
 4. Crea partita e verifica dashboard
 5. Controlla status sistema nel terminal
 
 ### Debugging
+
 - **Backend logs**: Visibili nel terminal
 - **Frontend logs**: Browser DevTools
 - **Database**: MongoDB Atlas dashboard
@@ -201,11 +219,13 @@ NODE_ENV=development
 ## 🚀 Deployment
 
 ### Build Produzione
+
 ```bash
 npm run build   # Genera dist/ folder
 ```
 
 ### Variabili Produzione
+
 ```env
 NODE_ENV=production
 PORT=80
