@@ -204,6 +204,8 @@ export default {
 .stat-label {
   font-size: 0.8rem;
   color: var(--text-secondary);
+  color: var(--text-muted);
+  text-transform: uppercase;
 }
 
 .actions-bar {
@@ -267,12 +269,6 @@ export default {
   flex-direction: column;
   align-items: center;
   gap: var(--spacing-xs);
-}
-
-.stat-label {
-  font-size: 0.6rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
 }
 
 .stat-value {
