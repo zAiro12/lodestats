@@ -131,3 +131,4 @@ ui-debug.log
 *.sqlite3
 
 utils/
+package-lock.json
